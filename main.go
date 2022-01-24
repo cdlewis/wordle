@@ -24,7 +24,7 @@ func getWords(filePath string) []string {
 
 type Result struct {
 	Word string
-	p50  int
+	p50  float64
 }
 
 func main() {
@@ -93,9 +93,14 @@ func main() {
 				scores = append(scores, scorer.score(startWord, targetWord))
 			}
 
+			// Calculate median
 			sort.Ints(scores)
-
-			p50 := scores[len(scores)/2]
+			var p50 float64
+			if len(scores)%2 == 1 {
+				p50 = float64(scores[len(scores)/2])
+			} else {
+				p50 = float64(scores[len(scores)/2]+scores[len(scores)/2-1]) / 2.0
+			}
 
 			reportResult(Result{Word: startWord, p50: p50})
 		}
